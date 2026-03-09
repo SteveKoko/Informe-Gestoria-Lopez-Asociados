@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!--
+  ═══════════════════════════════════════════════════════════════
+  AUDITORÍA DE SEGURIDAD — Gestoría López & Asociados
+  Proyecto FP SMR (Sistemas Microinformáticos y Redes)
+  España 2025-2026
+
+  ESTRUCTURA DE ARCHIVOS:
+    index.html   ← esta página (estructura HTML pura)
+    styles.css   ← todo el diseño visual y animaciones
+    network.js   ← datos de red + renderizador SVG + modal
+    passgen.js   ← generador de contraseñas (Pyodide/Python)
+    passgen.py   ← código Python original (referencia)
+  ═══════════════════════════════════════════════════════════════
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auditoría de Seguridad — Gestoría López & Asociados | Proyecto FP SMR</title>
+
+<!-- ── ESTILOS ── -->
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ══ CABECERA ══ -->
+  <header>
+    <div class="header-badge">FP Grado Medio · SMR España 2025–2026</div>
+    <h1>Auditoría de Seguridad — <span>Gestoría López & Asociados</span></h1>
+    <p class="header-sub">Proyecto de Emprendimiento · Servicio de Auditorías para PYMEs · 12 empleados</p>
+    <div class="modules-bar">
+      <span class="mod-tag active">Redes Locales</span>
+      <span class="mod-tag active">Seguridad Informática</span>
+      <span class="mod-tag active">SO en Red</span>
+      <span class="mod-tag active">Servicios en Red</span>
+      <span class="mod-tag">Montaje y Mantenimiento</span>
+      <span class="mod-tag">SO Monopuesto</span>
+      <span class="mod-tag">Empresa e Iniciativa Emprendedora</span>
+      <span class="mod-tag">FOL</span>
+    </div>
+  </header>
+
+  <!-- ══ CONTROLES DE RED ══ -->
+  <div class="controls">
+    <div class="net-toggle">
+      <button id="btnBefore" class="active-before" onclick="showNet('before')">
+        <span class="dot"></span> ANTES de la Auditoría
+      </button>
+      <button id="btnAfter" onclick="showNet('after')">
+        <span class="dot"></span> DESPUÉS de la Auditoría
+      </button>
+    </div>
+    <div class="right-controls">
+      <label class="vuln-label" title="Mostrar/ocultar indicadores de vulnerabilidad">
+        <input type="checkbox" id="vulnToggle" onchange="toggleVulns()">
+        <div class="switch-track"></div>
+        <span>MOSTRAR VULNERABILIDADES</span>
+      </label>
+      <div class="help-tip">◉ PULSA CUALQUIER DISPOSITIVO</div>
+    </div>
+  </div>
+
+  <!-- ══ DIAGRAMA DE RED ══ -->
+  <div class="diagram-wrapper">
+    <div class="diagram-header">
+      <div class="diagram-title">
+        <h2 id="diagTitle" class="status-danger">RED ANTES DE LA AUDITORÍA — VULNERABLE</h2>
+        <span id="riskBadge" class="risk-badge danger">RIESGO CRÍTICO</span>
+      </div>
+      <div class="diagram-legend">
+        <div class="leg-item"><div class="leg-dot" style="background:#ff3860"></div> INSEGURO</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#00ff99"></div> SEGURO</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#ffb800"></div> ATENCIÓN</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#00c8ff"></div> NEUTRO</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#b57bff"></div> DMZ</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#ffb800"></div> ADMIN</div>
+      </div>
+    </div>
+    <!-- El SVG se genera dinámicamente desde network.js -->
+    <svg id="netSvg" viewBox="0 0 1200 660" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+
+  <!-- ══ BARRA DE ESTADO ══ -->
+  <div class="status-footer">
+    <div class="sf-item">EMPRESA: <span class="sv">Gestoría López & Asociados</span></div>
+    <div class="sf-item">EMPLEADOS: <span class="sv">12</span></div>
+    <div class="sf-item" id="sfVulns">VULNERABILIDADES: <span class="sv red">23 detectadas</span></div>
+    <div class="sf-item" id="sfFirewall">FIREWALL: <span class="sv red">NO CONFIGURADO</span></div>
+    <div class="sf-item" id="sfDmz">DMZ: <span class="sv red">NO EXISTE</span></div>
+    <div class="sf-item" id="sfCompliance">RGPD/ENS: <span class="sv red">INCUMPLIMIENTO</span></div>
+    <div class="sf-item">MÓDULOS SMR: <span class="sv blue">Redes Locales · SO en Red · Seguridad Informática · Servicios en Red</span></div>
+  </div>
+
+  <!-- ══ TIRA DE INFORMACIÓN ══ -->
+  <div class="info-strip" id="infoStrip">
+    <strong>[ ESTADO ACTUAL ]</strong> Red plana sin segmentación · Sin firewall perimetral ·
+    Servidor web expuesto en red interna · DC accesible desde todos los equipos ·
+    Impresora con credenciales por defecto · SSH en puerto estándar ·
+    Apache sin actualizar (CVE pendientes) · Sin copias de seguridad ·
+    Incumplimiento RGPD (Reg. UE 2016/679) ·
+    <strong>Módulos: Redes Locales (1º SMR) · Seguridad Informática (2º SMR) · SO en Red (2º SMR)</strong>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       GENERADOR DE CONTRASEÑAS (Python via Pyodide WASM)
+  ══════════════════════════════════════════════════════════ -->
+  <div class="passgen-wrapper" id="passgenSection">
+
+    <div class="passgen-header">
+      <div class="passgen-title-row">
+        <div class="passgen-badge">🐍 PYTHON · PYODIDE WASM</div>
+        <h2 class="passgen-title">Generador de Contraseña</h2>
+        <p class="passgen-sub">
+          Código Python real ejecutándose en el navegador ·
+          Módulo: <strong>Programación</strong> / <strong>Seguridad Informática · FP SMR</strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="passgen-body">
+
+      <!-- Panel izquierdo: código fuente con sintaxis coloreada -->
+      <div class="passgen-code-panel">
+        <div class="code-toolbar">
+          <span class="code-lang">passgen.py</span>
+          <div class="code-dots"><span></span><span></span><span></span></div>
+        </div>
+        <pre class="code-block" id="codeBlock"><span class="kw">import</span> random
+
+chars = [<span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'c'</span>, <span class="str">'d'</span>, <span class="str">'e'</span>, <span class="str">'f'</span>, <span class="str">'g'</span>, <span class="str">'h'</span>, <span class="str">'i'</span>, <span class="str">'j'</span>,
+         <span class="str">'k'</span>, <span class="str">'l'</span>, <span class="str">'m'</span>, <span class="str">'n'</span>, <span class="str">'o'</span>, <span class="str">'p'</span>, <span class="str">'q'</span>, <span class="str">'r'</span>, <span class="str">'s'</span>, <span class="str">'t'</span>,
+         <span class="str">'u'</span>, <span class="str">'v'</span>, <span class="str">'w'</span>, <span class="str">'x'</span>, <span class="str">'y'</span>, <span class="str">'z'</span>, <span class="str">'A'</span> … <span class="str">'Z'</span>,
+         <span class="str">'0'</span> … <span class="str">'9'</span>, <span class="str">'!'</span>, <span class="str">'"'</span>, <span class="str">'#'</span>, <span class="str">'$'</span>, <span class="str">'%'</span>, <span class="str">'&amp;'</span>, <span class="str">"'"</span>,
+         <span class="str">'('</span>, <span class="str">')'</span>, <span class="str">'*'</span>, <span class="str">'+'</span>, <span class="str">','</span>, <span class="str">'-'</span>, <span class="str">'.'</span>, <span class="str">'/'</span>, <span class="str">':'</span>,
+         <span class="str">';'</span>, <span class="str">'&lt;'</span>, <span class="str">'='</span>, <span class="str">'&gt;'</span>, <span class="str">'?'</span>, <span class="str">'@'</span>, <span class="str">'['</span>, <span class="str">']'</span>, <span class="str">'^'</span>,
+         <span class="str">'_'</span>, <span class="str">'`'</span>, <span class="str">'{'</span>, <span class="str">'|'</span>, <span class="str">'}'</span>, <span class="str">'~'</span>]
+
+random.shuffle(chars)
+passwd = []
+n = <span class="hl" id="codeN">16</span>  <span class="cm"># longitud introducida por el usuario</span>
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(n):
+    char = random.randint(<span class="num">0</span>, <span class="fn">len</span>(chars) - <span class="num">1</span>)
+    passwd.append(chars[char])
+
+passwd_fn = <span class="str">""</span>.join(passwd)
+<span class="fn">print</span>(passwd_fn)</pre>
+      </div>
+
+      <!-- Panel derecho: controles y salida -->
+      <div class="passgen-right">
+
+        <div class="passgen-controls">
+          <div class="ctrl-label">LONGITUD DE LA CONTRASEÑA</div>
+          <div class="ctrl-row">
+            <input type="range" id="pwLen" min="4" max="64" value="16"
+              oninput="syncLen(this.value)" class="pw-slider">
+            <div class="pw-len-display" id="pwLenDisplay">16</div>
+          </div>
+
+          <div class="ctrl-label" style="margin-top:14px">CANTIDAD A GENERAR</div>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="setQty(1)" id="qty1">× 1</button>
+            <button class="qty-btn" onclick="setQty(5)" id="qty5">× 5</button>
+            <button class="qty-btn" onclick="setQty(10)" id="qty10">× 10</button>
+          </div>
+
+          <button class="gen-btn" id="genBtn" onclick="generatePasswords()" disabled>
+            <span id="genBtnIcon">⏳</span>
+            <span id="genBtnText">Cargando Python…</span>
+          </button>
+
+          <div class="pyodide-status" id="pyStatus">
+            <span class="py-dot" id="pyDot"></span>
+            <span id="pyStatusText">Iniciando Pyodide (Python 3.11 WASM)…</span>
+          </div>
+        </div>
+
+        <div class="passgen-output" id="passOutput">
+          <div class="output-placeholder" id="outputPlaceholder">
+            <span>▶ Pulsa <strong>GENERAR</strong> para ejecutar el código</span>
+          </div>
+          <div id="outputList"></div>
+        </div>
+
+        <div class="passgen-strength" id="strengthSection" style="display:none">
+          <div class="ctrl-label">ANÁLISIS DE LA ÚLTIMA CONTRASEÑA</div>
+          <div class="strength-bars" id="strengthBars"></div>
+          <div class="strength-label" id="strengthLabel"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.container -->
+
+<!-- ══ MODAL de detalle de dispositivo ══ -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-top">
+      <div class="modal-icon-wrap" id="mIcon">🖥️</div>
+      <div class="modal-meta">
+        <h3 id="mName">Dispositivo</h3>
+        <div class="device-type" id="mType">TIPO DE DISPOSITIVO</div>
+        <div class="ip-chip" id="mIp">IP: —</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="mBody"></div>
+  </div>
+</div>
+
+<!-- ══ TOOLTIP ══ -->
+<div class="tooltip" id="tooltip"></div>
+
+<!-- ══ SCRIPTS (al final para no bloquear el renderizado HTML) ══ -->
+<!-- 1. Lógica del diagrama de red y datos -->
+<script src="network.js"></script>
+
+<!-- 2. Pyodide: intérprete Python 3.11 en WebAssembly -->
+<script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
+
+<!-- 3. Generador de contraseñas (depende de Pyodide) -->
+<script src="passgen.js"></script>
+
+</body>
+</html>
