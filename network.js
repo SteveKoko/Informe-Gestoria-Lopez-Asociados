@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
    AUDITORÍA DE SEGURIDAD — Gestoría López & Asociados
-   Proyecto FP SMR · network.js
+   network.js
    Contiene:
      · NETWORKS{}  — datos completos de ambas redes (before/after)
                      nodos, conexiones, zonas, specs, vulns, fixes
@@ -27,7 +27,7 @@ const NETWORKS = {
     statusFirewall: '<span class="sv red">NO CONFIGURADO</span>',
     statusDmz: '<span class="sv red">NO EXISTE</span>',
     statusCompliance: '<span class="sv red">INCUMPLIMIENTO</span>',
-    info: '<strong>[ ESTADO ACTUAL ]</strong> Red plana sin segmentación · Sin firewall perimetral · Servidor web expuesto en red interna · DC accesible desde todos los equipos · Impresora con credenciales por defecto · SSH en puerto estándar · Apache sin actualizar (CVE pendientes) · Sin copias de seguridad automatizadas · <strong>Incumplimiento RGPD (Reg. UE 2016/679) · Módulos: Redes Locales · Seguridad Informática · SO en Red · Servicios en Red</strong>',
+    info: '<strong>[ ESTADO ACTUAL ]</strong> Red plana sin segmentación · Sin firewall perimetral · Servidor web expuesto en red interna · DC accesible desde todos los equipos · Impresora con credenciales por defecto · SSH en puerto estándar · Apache sin actualizar (CVE pendientes) · Sin copias de seguridad automatizadas · <strong>Incumplimiento RGPD (Reg. UE 2016/679)</strong>',
 
     zones: [],
 
@@ -62,7 +62,6 @@ const NETWORKS = {
             { sev: 'crit', text: 'Sin IDS/IPS: ataques externos no son detectados ni bloqueados' },
             { sev: 'high', text: 'IP pública estática sin rotación: facilita reconocimiento pasivo por atacantes' },
           ],
-          modules: ['Redes Locales', 'Seguridad Informática'],
         }
       },
       router: {
@@ -89,7 +88,6 @@ const NETWORKS = {
             { sev: 'med',  text: 'Sin separación de zonas de red: todo el tráfico LAN/WAN pasa por el mismo router' },
             { sev: 'med',  text: 'Contraseña de administración por defecto no cambiada' },
           ],
-          modules: ['Redes Locales', 'Seguridad Informática', 'Servicios en Red'],
         }
       },
       switch: {
@@ -102,7 +100,6 @@ const NETWORKS = {
           icon: '🔀',
           specs: [],
           vulns: [],
-          modules: [],
         }
       },
       dc: {
@@ -135,7 +132,6 @@ const NETWORKS = {
             { sev: 'med',  text: 'Cuenta de administrador de dominio con nombre por defecto "Administrator"' },
             { sev: 'med',  text: 'Sin auditoría de eventos habilitada: imposible rastrear accesos o cambios' },
           ],
-          modules: ['SO en Red', 'Seguridad Informática', 'Servicios en Red'],
         }
       },
       web: {
@@ -168,7 +164,6 @@ const NETWORKS = {
             { sev: 'med',  text: 'Sin WAF (Web Application Firewall): sin protección contra SQL injection, XSS, etc.' },
             { sev: 'med',  text: 'Headers HTTP de seguridad ausentes (X-Frame-Options, CSP, HSTS)' },
           ],
-          modules: ['Servicios en Red', 'Seguridad Informática', 'SO en Red'],
         }
       },
       pcs: {
@@ -197,7 +192,6 @@ const NETWORKS = {
             { sev: 'med',  text: 'Sin cifrado de disco BitLocker: si un equipo es robado, los datos son accesibles directamente' },
             { sev: 'med',  text: 'Mezcla de versiones Windows 10: dificulta gestión centralizada y parches de seguridad' },
           ],
-          modules: ['SO Monopuesto', 'SO en Red', 'Seguridad Informática'],
         }
       },
       printer: {
@@ -227,7 +221,6 @@ const NETWORKS = {
             { sev: 'med',  text: 'Sin separación de VLAN: la impresora tiene acceso directo a los servidores y equipos de la red' },
             { sev: 'low',  text: 'Sin logging de trabajos de impresión: imposible auditar quién ha impreso qué documentos (incumplimiento RGPD)' },
           ],
-          modules: ['Redes Locales', 'Seguridad Informática', 'Montaje y Mantenimiento de Equipos'],
         }
       }
     }
@@ -243,7 +236,7 @@ const NETWORKS = {
     statusFirewall: '<span class="sv green">Debian 13 + iptables activo</span>',
     statusDmz: '<span class="sv green">DMZ aislada (172.16.1.0/24)</span>',
     statusCompliance: '<span class="sv green">CUMPLIMIENTO RGPD</span>',
-    info: '<strong>[ ESTADO TRAS AUDITORÍA ]</strong> Firewall Debian 13 + iptables con 3 zonas (WAN/DMZ/LAN) · Servidor web en DMZ aislado · Switch gestionable con VLANs · DC protegido en red interna · Impresora en VLAN aislada · SSH en puerto no estándar + clave pública · Apache actualizado + HTTPS TLS 1.3 · NAS con backup automatizado · <strong>RGPD cumplido · Módulos: Redes Locales · Seguridad Informática · SO en Red · Servicios en Red</strong>',
+    info: '<strong>[ ESTADO TRAS AUDITORÍA ]</strong> Firewall Debian 13 + iptables con 3 zonas (WAN/DMZ/LAN) · Servidor web en DMZ aislado · Switch gestionable con VLANs · DC protegido en red interna · Impresora en VLAN aislada · SSH en puerto no estándar + clave pública · Apache actualizado + HTTPS TLS 1.3 · NAS con backup automatizado · <strong>RGPD cumplido</strong>',
 
     zones: [
       { id: 'zone-dmz',  x: 30,  y: 190, w: 450, h: 445, color: '#b57bff', label: 'ZONA DMZ — 172.16.1.0/24' },
@@ -287,7 +280,6 @@ const NETWORKS = {
             'Solo los puertos 80 (HTTP→redirect) y 443 (HTTPS) están expuestos al exterior, dirigidos a la DMZ',
             'IDS/IPS Suricata monitoriza el tráfico entrante en tiempo real',
           ],
-          modules: ['Redes Locales', 'Seguridad Informática'],
         }
       },
       fw: {
@@ -322,7 +314,6 @@ const NETWORKS = {
             'Logging de paquetes denegados: iptables -j LOG --log-prefix "DROPPED: " para auditoría RGPD',
             'iptables-persistent: reglas guardadas con iptables-save y restauradas automáticamente al arranque',
           ],
-          modules: ['Seguridad Informática', 'Redes Locales', 'SO en Red', 'Servicios en Red'],
         }
       },
       swdmz: {
@@ -335,7 +326,6 @@ const NETWORKS = {
           icon: '🔀',
           specs: [],
           fixes: [],
-          modules: [],
         }
       },
       swlan: {
@@ -348,7 +338,6 @@ const NETWORKS = {
           icon: '🔀',
           specs: [],
           fixes: [],
-          modules: [],
         }
       },
       web2: {
@@ -378,7 +367,6 @@ const NETWORKS = {
             'Directory listing desactivado, headers de seguridad configurados',
             'Actualizaciones automáticas de seguridad (unattended-upgrades)',
           ],
-          modules: ['Servicios en Red', 'Seguridad Informática', 'SO en Red'],
         }
       },
       ids: {
@@ -403,7 +391,6 @@ const NETWORKS = {
             'Alertas automáticas por email al administrador ante eventos de seguridad',
             'Cumple requisito RGPD de registro de accesos y monitorización continua',
           ],
-          modules: ['Seguridad Informática', 'Redes Locales', 'Servicios en Red'],
         }
       },
       dc2: {
@@ -432,7 +419,6 @@ const NETWORKS = {
             'Backup diario automático en NAS con Veeam: RPO de 24h, RTO de 2h',
             'Auditoría completa de eventos habilitada: cumple art. 32 RGPD',
           ],
-          modules: ['SO en Red', 'Seguridad Informática', 'Servicios en Red'],
         }
       },
       wsus: {
@@ -456,7 +442,6 @@ const NETWORKS = {
             'Antivirus gestionado centralmente: visibilidad de amenazas en todos los endpoints',
             'EDR (Endpoint Detection & Response): respuesta automática ante comportamientos maliciosos',
           ],
-          modules: ['SO en Red', 'Seguridad Informática'],
         }
       },
       nas: {
@@ -481,7 +466,6 @@ const NETWORKS = {
             'Cifrado AES-256: datos protegidos ante robo físico del NAS (cumple RGPD)',
             'Retención de 30 días: permite recuperación ante ransomware',
           ],
-          modules: ['Seguridad Informática', 'Montaje y Mantenimiento de Equipos'],
         }
       },
       pcs2: {
@@ -508,7 +492,6 @@ const NETWORKS = {
             'Usuarios sin privilegios de administrador local: contención de malware',
             'AppLocker: solo aplicaciones aprobadas pueden ejecutarse',
           ],
-          modules: ['SO Monopuesto', 'SO en Red', 'Seguridad Informática'],
         }
       },
       printer2: {
@@ -537,7 +520,6 @@ const NETWORKS = {
             'SNMPv3 con autenticación: reemplaza el antiguo SNMP v1 sin cifrado',
             'Logging de trabajos: registro de quién imprime qué (cumple RGPD trazabilidad)',
           ],
-          modules: ['Redes Locales', 'Seguridad Informática', 'Montaje y Mantenimiento de Equipos'],
         }
       },
       admin: {
@@ -569,7 +551,6 @@ const NETWORKS = {
             'BitLocker activo: si el equipo es robado, las credenciales de administración están protegidas',
             'Todos los accesos administrativos quedan registrados en el SIEM Wazuh (trazabilidad RGPD art. 32)',
           ],
-          modules: ['SO en Red', 'Seguridad Informática', 'Redes Locales'],
         }
       }
     }
@@ -995,22 +976,7 @@ function openModal(nodeId) {
     html += `</div>`;
   }
 
-  // Modules
-  if (d.modules && d.modules.length) {
-    html += `<div class="modal-section">
-      <div class="section-label">MÓDULOS SMR RELACIONADOS</div>
-      <div class="mod-refs">`;
-    for (const m of d.modules) {
-      const cls = currentNet === 'after' ? 'green' : '';
-      html += `<span class="mod-ref-tag ${cls}">${m}</span>`;
-    }
-    html += `</div>
-      <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:10px;line-height:1.7;padding:8px;border:1px solid var(--border);background:rgba(0,0,0,0.3)">
-        ◈ Ciclo Formativo Grado Medio de Sistemas Microinformáticos y Redes (SMR) · España 2025-2026<br>
-        ◈ RD 1691/2007 · Familia Informática y Comunicaciones · 2000 horas
-      </div>
-    </div>`;
-  }
+
 
   document.getElementById('mBody').innerHTML = html;
   document.getElementById('modalOverlay').classList.add('open');

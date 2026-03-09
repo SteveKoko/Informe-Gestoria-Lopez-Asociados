@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
    AUDITORÍA DE SEGURIDAD — Gestoría López & Asociados
-   Proyecto FP SMR · passgen.js
+   passgen.js
    Contiene:
      · initPyodide()        — carga Pyodide (Python 3.11 WASM)
      · generatePasswords()  — ejecuta passgen.py en el navegador

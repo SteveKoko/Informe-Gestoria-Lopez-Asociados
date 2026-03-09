@@ -1,8 +1,7 @@
 # ═══════════════════════════════════════════════════════════════
 # AUDITORÍA DE SEGURIDAD — Gestoría López & Asociados
-# Proyecto FP SMR · passgen.py
+# passgen.py
 # Generador de contraseñas seguras
-# Módulo: Seguridad Informática / Programación · FP SMR España
 #
 # USO EN TERMINAL:
 #   python passgen.py
