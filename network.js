@@ -42,7 +42,7 @@ const NETWORKS = {
 
     nodes: {
       internet: {
-        x: 600, y: 40,
+        x: 600, y: 90,
         icon: '🌐', label: 'INTERNET', sublabel: 'WAN / ISP',
         ip: '83.56.142.19 (WAN)',
         color: '#00c8ff', type: 'internet',
@@ -65,7 +65,7 @@ const NETWORKS = {
         }
       },
       router: {
-        x: 600, y: 145,
+        x: 600, y: 210,
         icon: '📡', label: 'ROUTER ISP', sublabel: 'Router de borde',
         ip: 'WAN: 83.56.142.19 / LAN: 192.168.1.1',
         color: '#ffb800', type: 'router',
@@ -91,7 +91,7 @@ const NETWORKS = {
         }
       },
       switch: {
-        x: 600, y: 270,
+        x: 600, y: 330,
         icon: '🔀', label: 'SWITCH', sublabel: 'D-Link DES-1024D',
         ip: 'No gestionable — Sin IP',
         color: '#ffb800', type: 'switch',
@@ -103,20 +103,19 @@ const NETWORKS = {
         }
       },
       dc: {
-        x: 195, y: 460,
-        icon: '🖥️', label: 'CONTROLADOR', sublabel: 'Windows Server 2019',
+        x: 195, y: 480,
+        icon: '🖥️', label: 'CONTROLADOR', sublabel: 'Windows Server 2012 R2',
         ip: '192.168.1.10',
         color: '#ff3860', type: 'server', vuln: true,
         detail: {
-          name: 'Controlador de Dominio — Windows Server 2019', type: 'SERVIDOR — DOMAIN CONTROLLER (AD DS)',
+          name: 'Controlador de Dominio — Windows Server 2012 R2', type: 'SERVIDOR — DOMAIN CONTROLLER (AD DS)',
           icon: '🖥️',
           specs: [
-            { k: 'SO', v: 'Windows Server 2019 (Build 17763)' },
+            { k: 'SO', v: 'Windows Server 2012 R2 (Build 9600)' },
             { k: 'IP', v: '192.168.1.10' },
             { k: 'Máscara / GW', v: '255.255.255.0 / 192.168.1.1' },
             { k: 'Rol principal', v: 'AD DS + DNS + DHCP' },
             { k: 'Dominio', v: 'gestoria.local' },
-            { k: 'Actualizaciones', v: '18 KB pendientes', cls: 'bad' },
             { k: 'Antivirus', v: 'Windows Defender (desact.)', cls: 'bad' },
             { k: 'RDP', v: 'Puerto 3389 ABIERTO', cls: 'bad' },
             { k: 'SMBv1', v: 'ACTIVADO', cls: 'bad' },
@@ -124,7 +123,6 @@ const NETWORKS = {
           ],
           vulns: [
             { sev: 'crit', text: 'RDP (puerto 3389) expuesto en red sin autenticación NLA: vulnerable a ataques de fuerza bruta y BlueKeep (CVE-2019-0708)' },
-            { sev: 'crit', text: '18 actualizaciones de seguridad pendientes, incluyendo parches críticos de AD DS' },
             { sev: 'crit', text: 'SMBv1 activo: vulnerable a EternalBlue/WannaCry (MS17-010). Protocolo obsoleto y sin soporte' },
             { sev: 'high', text: 'Windows Defender desactivado: sin protección contra malware en tiempo real' },
             { sev: 'high', text: 'Política de contraseñas débil: sin longitud mínima, sin complejidad, sin expiración' },
@@ -135,7 +133,7 @@ const NETWORKS = {
         }
       },
       web: {
-        x: 460, y: 460,
+        x: 460, y: 480,
         icon: '🌍', label: 'SERVIDOR WEB', sublabel: 'Apache 2.4.41 + SSH',
         ip: '192.168.1.20',
         color: '#ff3860', type: 'server', vuln: true,
@@ -167,7 +165,7 @@ const NETWORKS = {
         }
       },
       pcs: {
-        x: 730, y: 460,
+        x: 730, y: 480,
         icon: '💻', label: '12 EQUIPOS', sublabel: 'Windows 10 (clientes)',
         ip: '192.168.1.100 – .111',
         color: '#ffb800', type: 'clients', vuln: true,
@@ -195,7 +193,7 @@ const NETWORKS = {
         }
       },
       printer: {
-        x: 995, y: 460,
+        x: 995, y: 480,
         icon: '🖨️', label: 'IMPRESORA', sublabel: 'HP LaserJet Pro',
         ip: '192.168.1.200',
         color: '#ff3860', type: 'printer', vuln: true,
@@ -236,112 +234,65 @@ const NETWORKS = {
     statusFirewall: '<span class="sv green">Debian 13 + iptables activo</span>',
     statusDmz: '<span class="sv green">DMZ aislada (172.16.1.0/24)</span>',
     statusCompliance: '<span class="sv green">CUMPLIMIENTO RGPD</span>',
-    info: '<strong>[ ESTADO TRAS AUDITORÍA ]</strong> Firewall Debian 13 + iptables con 3 zonas (WAN/DMZ/LAN) · Servidor web en DMZ aislado · Switch gestionable con VLANs · DC protegido en red interna · Impresora en VLAN aislada · SSH en puerto no estándar + clave pública · Apache actualizado + HTTPS TLS 1.3 · NAS con backup automatizado · <strong>RGPD cumplido</strong>',
+    info: '<strong>[ ESTADO TRAS AUDITORÍA ]</strong> Red NAT con salida a internet · Firewall Debian 13 + iptables entre DMZ y LAN · Servidor web en DMZ aislado · DC protegido en red interna · Impresora en red interna · SSH en puerto no estándar + clave pública · Apache actualizado + HTTPS TLS 1.3 · <strong>RGPD cumplido</strong>',
 
     zones: [
-      { id: 'zone-dmz',  x: 30,  y: 190, w: 450, h: 445, color: '#b57bff', label: 'ZONA DMZ — 172.16.1.0/24' },
-      { id: 'zone-lan',  x: 510, y: 190, w: 670, h: 445, color: '#00ff99', label: 'RED LAN INTERNA — 192.168.0.0/24' },
+      { id: 'zone-dmz',  x: 200, y: 165,  w: 800, h: 240, color: '#b57bff', label: 'ZONA DMZ — 172.16.1.0/24 (RED NAT)' },
+      { id: 'zone-lan',  x: 130, y: 580, w: 940, h: 270, color: '#00ff99', label: 'RED LAN INTERNA — 192.168.0.0/24' },
     ],
 
     connections: [
-      { from: 'internet',   to: 'fw',      color: '#00c8ff', dash: false },
-      { from: 'fw',         to: 'swdmz',   color: '#b57bff', dash: false },
-      { from: 'fw',         to: 'swlan',   color: '#00ff99', dash: false },
-      { from: 'swdmz',      to: 'web2',    color: '#b57bff', dash: false },
-      { from: 'swdmz',      to: 'ids',     color: '#b57bff', dash: false },
-      { from: 'swlan',      to: 'dc2',     color: '#00ff99', dash: false },
-      { from: 'swlan',      to: 'wsus',    color: '#00ff99', dash: false },
-      { from: 'swlan',      to: 'nas',     color: '#00ff99', dash: false },
-      { from: 'swlan',      to: 'pcs2',    color: '#00ff99', dash: false },
-      { from: 'swlan',      to: 'printer2',color: '#00ff99', dash: true  },
-      { from: 'swlan',      to: 'admin',   color: '#ffb800', dash: false },
-      { from: 'admin',      to: 'dc2',     color: '#ffb800', dash: true  },
-      { from: 'admin',      to: 'web2',    color: '#ffb800', dash: true  },
+      { from: 'internet',  to: 'swdmz',    color: '#00c8ff', dash: false },
+      { from: 'swdmz',     to: 'web2',     color: '#b57bff', dash: false },
+      { from: 'swdmz',     to: 'fw',       color: '#b57bff', dash: false },
+      { from: 'fw',        to: 'swlan',    color: '#00ff99', dash: false },
+      { from: 'swlan',     to: 'dc2',      color: '#00ff99', dash: false },
+      { from: 'swlan',     to: 'pcs2',     color: '#00ff99', dash: false },
+      { from: 'swlan',     to: 'printer2', color: '#00ff99', dash: true  },
+      { from: 'swlan',     to: 'admin',    color: '#00ff99', dash: false },
+      { from: 'admin',     to: 'dc2',      color: '#ffb800', dash: true  },
+      { from: 'admin',     to: 'web2',     color: '#ffb800', dash: true  },
     ],
 
     nodes: {
       internet: {
-        x: 600, y: 40,
-        icon: '🌐', label: 'INTERNET', sublabel: 'WAN / ISP',
-        ip: '83.56.142.19 (WAN)',
+        x: 600, y: 75,
+        icon: '🌐', label: 'INTERNET', sublabel: 'WAN / ISP (NAT)',
+        ip: '83.56.142.19 (WAN · NAT)',
         color: '#00c8ff', type: 'internet',
         detail: {
-          name: 'Conexión a Internet', type: 'WAN / ISP Telefónica',
+          name: 'Conexión a Internet (NAT)', type: 'WAN / ISP Telefónica — RED NAT',
           icon: '🌐',
           specs: [
             { k: 'Proveedor ISP', v: 'Telefónica España' },
             { k: 'IP pública (WAN)', v: '83.56.142.19' },
             { k: 'Tipo', v: 'Fibra óptica FTTH' },
             { k: 'Ancho de banda', v: '600 Mbps ↓ / 300 Mbps ↑' },
+            { k: 'NAT', v: 'Activo — traducción de direcciones', cls: 'ok' },
             { k: 'Protegido por', v: 'Debian 13 + iptables', cls: 'ok' },
           ],
           fixes: [
-            'Todo el tráfico externo ahora pasa por el firewall Debian 13 + iptables antes de entrar a cualquier zona',
+            'Red NAT configurada: las direcciones internas no son visibles desde internet',
+            'Todo el tráfico externo pasa por la DMZ antes de alcanzar la red interna',
             'Solo los puertos 80 (HTTP→redirect) y 443 (HTTPS) están expuestos al exterior, dirigidos a la DMZ',
             'IDS/IPS Suricata monitoriza el tráfico entrante en tiempo real',
           ],
         }
       },
-      fw: {
-        x: 600, y: 148,
-        icon: '🛡️', label: 'FIREWALL', sublabel: 'Debian 13 + iptables',
-        ip: 'WAN: 83.56.142.19 | DMZ: 172.16.1.1 | LAN: 192.168.0.1',
-        color: '#00ff99', type: 'firewall',
-        detail: {
-          name: 'Firewall — Debian 13 + iptables', type: 'FIREWALL PERIMETRAL — 3 ZONAS',
-          icon: '🛡️',
-          specs: [
-            { k: 'SO', v: 'Debian GNU/Linux 13 (Trixie)', cls: 'ok' },
-            { k: 'Firewall', v: 'iptables + iptables-persistent', cls: 'ok' },
-            { k: 'IP WAN', v: '83.56.142.19' },
-            { k: 'IP DMZ (eth1)', v: '172.16.1.1 /24' },
-            { k: 'IP LAN (eth2)', v: '192.168.0.1 /24' },
-            { k: 'IP Forwarding', v: 'Activo (net.ipv4.ip_forward=1)', cls: 'ok' },
-            { k: 'Política por defecto', v: 'DROP en INPUT y FORWARD', cls: 'ok' },
-            { k: 'NAT/Masquerade', v: 'MASQUERADE en WAN (eth0)', cls: 'ok' },
-            { k: 'IDS/IPS', v: 'Suricata 7.x + iptables NFQUEUE', cls: 'ok' },
-            { k: 'VPN', v: 'OpenVPN + iptables tun0', cls: 'ok' },
-            { k: 'Logging', v: 'rsyslog → /var/log/iptables.log', cls: 'ok' },
-            { k: 'Reglas persistentes', v: 'iptables-save / netfilter-persistent', cls: 'ok' },
-          ],
-          fixes: [
-            'Política por defecto DROP: todo tráfico bloqueado salvo lo explícitamente permitido (iptables -P INPUT DROP / FORWARD DROP)',
-            'Separación en 3 zonas mediante interfaces eth0 (WAN), eth1 (DMZ 172.16.1.0/24) y eth2 (LAN 192.168.0.0/24)',
-            'Reglas FORWARD: DMZ→LAN bloqueado por defecto; LAN puede conectar a DMZ solo puerto 443',
-            'NAT con MASQUERADE: la LAN y DMZ salen a internet con la IP pública del firewall',
-            'Suricata en modo IPS via NFQUEUE: los paquetes pasan por el motor de detección antes de ser aceptados',
-            'OpenVPN sobre tun0 con reglas iptables específicas: acceso remoto seguro sin exponer la LAN',
-            'Logging de paquetes denegados: iptables -j LOG --log-prefix "DROPPED: " para auditoría RGPD',
-            'iptables-persistent: reglas guardadas con iptables-save y restauradas automáticamente al arranque',
-          ],
-        }
-      },
       swdmz: {
-        x: 240, y: 300,
+        x: 600, y: 235,
         icon: '🔀', label: 'SW DMZ', sublabel: 'Cisco SG250-08',
         ip: 'Sin IP — Bridge VirtualBox',
         color: '#b57bff', type: 'switch',
         detail: {
-          name: 'Switch DMZ', type: 'SWITCH GESTIONABLE — ZONA DMZ',
-          icon: '🔀',
-          specs: [],
-          fixes: [],
-        }
-      },
-      swlan: {
-        x: 830, y: 300,
-        icon: '🔀', label: 'SW LAN', sublabel: 'Cisco SG350-28',
-        ip: 'Sin IP — Bridge VirtualBox',
-        color: '#00ff99', type: 'switch',
-        detail: {
-          name: 'Switch LAN', type: 'SWITCH GESTIONABLE — RED INTERNA',
+          name: 'Switch DMZ', type: 'SWITCH — ZONA DMZ',
           icon: '🔀',
           specs: [],
           fixes: [],
         }
       },
       web2: {
-        x: 140, y: 460,
+        x: 460, y: 345,
         icon: '🌍', label: 'SERVIDOR WEB', sublabel: 'Apache 2.4.62 + SSH',
         ip: '172.16.1.10',
         color: '#b57bff', type: 'server',
@@ -369,32 +320,53 @@ const NETWORKS = {
           ],
         }
       },
-      ids: {
-        x: 360, y: 460,
-        icon: '🔍', label: 'IDS/SIEM', sublabel: 'Suricata + Wazuh',
-        ip: '172.16.1.20',
-        color: '#b57bff', type: 'monitor',
+      fw: {
+        x: 740, y: 493,
+        icon: '🛡️', label: 'FIREWALL', sublabel: 'Debian 13 + iptables',
+        ip: 'DMZ: 172.16.1.1 | LAN: 192.168.0.1',
+        color: '#00ff99', type: 'firewall',
         detail: {
-          name: 'IDS + SIEM — Suricata & Wazuh', type: 'SISTEMA DE DETECCIÓN DE INTRUSIONES',
-          icon: '🔍',
+          name: 'Firewall — Debian 13 + iptables', type: 'FIREWALL ENTRE DMZ Y LAN',
+          icon: '🛡️',
           specs: [
-            { k: 'IDS', v: 'Suricata 6.0 (activo)', cls: 'ok' },
-            { k: 'SIEM', v: 'Wazuh 4.7 (Open Source)', cls: 'ok' },
-            { k: 'IP', v: '172.16.1.20' },
-            { k: 'Modo', v: 'IDS + IPS (bloqueo activo)', cls: 'ok' },
-            { k: 'Firmas', v: 'ET Open + Emerging Threats', cls: 'ok' },
-            { k: 'Alertas', v: 'Email + dashboard', cls: 'ok' },
+            { k: 'SO', v: 'Debian GNU/Linux 13 (Trixie)', cls: 'ok' },
+            { k: 'Firewall', v: 'iptables + iptables-persistent', cls: 'ok' },
+            { k: 'IP DMZ (eth0)', v: '172.16.1.1 /24' },
+            { k: 'IP LAN (eth1)', v: '192.168.0.1 /24' },
+            { k: 'IP Forwarding', v: 'Activo (net.ipv4.ip_forward=1)', cls: 'ok' },
+            { k: 'Política por defecto', v: 'DROP en INPUT y FORWARD', cls: 'ok' },
+            { k: 'NAT/Masquerade', v: 'MASQUERADE en interfaz DMZ', cls: 'ok' },
+            { k: 'IDS/IPS', v: 'Suricata 7.x + iptables NFQUEUE', cls: 'ok' },
+            { k: 'VPN', v: 'OpenVPN + iptables tun0', cls: 'ok' },
+            { k: 'Logging', v: 'rsyslog → /var/log/iptables.log', cls: 'ok' },
+            { k: 'Reglas persistentes', v: 'iptables-save / netfilter-persistent', cls: 'ok' },
           ],
           fixes: [
-            'Suricata monitoriza todo el tráfico de la DMZ y detecta ataques en tiempo real',
-            'Wazuh SIEM: centraliza logs de todos los sistemas (DC, web, firewall, endpoints)',
-            'Alertas automáticas por email al administrador ante eventos de seguridad',
-            'Cumple requisito RGPD de registro de accesos y monitorización continua',
+            'Política por defecto DROP: todo tráfico bloqueado salvo lo explícitamente permitido (iptables -P INPUT DROP / FORWARD DROP)',
+            'Separación entre DMZ (172.16.1.0/24) y LAN (192.168.0.0/24) mediante interfaces eth0 y eth1',
+            'Reglas FORWARD: DMZ→LAN bloqueado por defecto; LAN puede conectar a DMZ solo puerto 443',
+            'NAT con MASQUERADE: la LAN sale a internet a través de la DMZ con traducción de direcciones',
+            'Suricata en modo IPS via NFQUEUE: los paquetes pasan por el motor de detección antes de ser aceptados',
+            'OpenVPN sobre tun0 con reglas iptables específicas: acceso remoto seguro sin exponer la LAN',
+            'Logging de paquetes denegados: iptables -j LOG --log-prefix "DROPPED: " para auditoría RGPD',
+            'iptables-persistent: reglas guardadas con iptables-save y restauradas automáticamente al arranque',
           ],
         }
       },
+      swlan: {
+        x: 600, y: 655,
+        icon: '🔀', label: 'SW LAN', sublabel: 'Cisco SG350-28',
+        ip: 'Sin IP — Bridge VirtualBox',
+        color: '#00ff99', type: 'switch',
+        detail: {
+          name: 'Switch LAN', type: 'SWITCH — RED INTERNA',
+          icon: '🔀',
+          specs: [],
+          fixes: [],
+        }
+      },
       dc2: {
-        x: 610, y: 435,
+        x: 300, y: 790,
         icon: '🖥️', label: 'CONTROLADOR', sublabel: 'Windows Server 2022',
         ip: '192.168.0.10',
         color: '#00ff99', type: 'server',
@@ -404,11 +376,11 @@ const NETWORKS = {
           specs: [
             { k: 'SO', v: 'Windows Server 2022 (Build 20348)', cls: 'ok' },
             { k: 'IP', v: '192.168.0.10 (LAN interna)' },
-            { k: 'Actualizaciones', v: 'Al día (WSUS automático)', cls: 'ok' },
+            { k: 'Actualizaciones', v: 'Al día (Windows Update)', cls: 'ok' },
             { k: 'Antivirus', v: 'Microsoft Defender + EDR', cls: 'ok' },
             { k: 'SMBv1', v: 'DESACTIVADO', cls: 'ok' },
             { k: 'RDP', v: 'Solo desde IPs admin + NLA', cls: 'ok' },
-            { k: 'Backup', v: 'Diario en NAS (Veeam)', cls: 'ok' },
+            { k: 'Backup', v: 'Backup diario configurado', cls: 'ok' },
             { k: 'Auditoría', v: 'GPO completa activada', cls: 'ok' },
           ],
           fixes: [
@@ -416,60 +388,13 @@ const NETWORKS = {
             'SMBv1 desactivado: eliminado riesgo de EternalBlue/WannaCry',
             'RDP restringido por IP + NLA obligatorio: solo acceden los administradores desde equipos autorizados',
             'GPOs de seguridad: contraseñas complejas (min. 12 chars), BitLocker, AppLocker',
-            'Backup diario automático en NAS con Veeam: RPO de 24h, RTO de 2h',
+            'Backup diario automático configurado: RPO de 24h, RTO de 2h',
             'Auditoría completa de eventos habilitada: cumple art. 32 RGPD',
           ],
         }
       },
-      wsus: {
-        x: 780, y: 435,
-        icon: '🔄', label: 'WSUS / AV', sublabel: 'Updates + Antivirus',
-        ip: '192.168.0.11',
-        color: '#00ff99', type: 'server',
-        detail: {
-          name: 'Servidor WSUS + Antivirus centralizado', type: 'GESTIÓN DE ACTUALIZACIONES Y SEGURIDAD',
-          icon: '🔄',
-          specs: [
-            { k: 'SO', v: 'Windows Server 2022' },
-            { k: 'IP', v: '192.168.0.11' },
-            { k: 'WSUS', v: 'Windows Server Update Services', cls: 'ok' },
-            { k: 'Antivirus', v: 'Microsoft Defender for Business', cls: 'ok' },
-            { k: 'Gestión EDR', v: 'Microsoft Intune', cls: 'ok' },
-            { k: 'Cobertura', v: '12 equipos + 2 servidores', cls: 'ok' },
-          ],
-          fixes: [
-            'WSUS centraliza todas las actualizaciones de Windows: ningún equipo queda sin parchar',
-            'Antivirus gestionado centralmente: visibilidad de amenazas en todos los endpoints',
-            'EDR (Endpoint Detection & Response): respuesta automática ante comportamientos maliciosos',
-          ],
-        }
-      },
-      nas: {
-        x: 960, y: 435,
-        icon: '💾', label: 'NAS / BACKUP', sublabel: 'Synology DS923+',
-        ip: '192.168.0.12',
-        color: '#00ff99', type: 'server',
-        detail: {
-          name: 'NAS — Synology DS923+ (Backup)', type: 'ALMACENAMIENTO + COPIAS DE SEGURIDAD',
-          icon: '💾',
-          specs: [
-            { k: 'Modelo', v: 'Synology DiskStation DS923+', cls: 'ok' },
-            { k: 'IP', v: '192.168.0.12' },
-            { k: 'RAID', v: 'RAID 5 (4 × 4 TB = 12 TB útiles)', cls: 'ok' },
-            { k: 'Backup', v: 'Veeam + Hyper Backup', cls: 'ok' },
-            { k: 'Cifrado', v: 'AES-256 en reposo', cls: 'ok' },
-            { k: 'Backup externo', v: 'Réplica en nube (B2)', cls: 'ok' },
-          ],
-          fixes: [
-            'Backup diario automático de AD DS, archivos de empresa y base de datos del servidor web',
-            'Regla 3-2-1: 3 copias, 2 medios distintos, 1 copia offsite (nube Backblaze B2)',
-            'Cifrado AES-256: datos protegidos ante robo físico del NAS (cumple RGPD)',
-            'Retención de 30 días: permite recuperación ante ransomware',
-          ],
-        }
-      },
       pcs2: {
-        x: 620, y: 545,
+        x: 540, y: 790,
         icon: '💻', label: '12 EQUIPOS', sublabel: 'Windows 11 Pro (dom.)',
         ip: '192.168.0.100 – .111',
         color: '#00ff99', type: 'clients',
@@ -478,9 +403,9 @@ const NETWORKS = {
           icon: '💻',
           specs: [
             { k: 'SO', v: 'Windows 11 Pro 23H2', cls: 'ok' },
-            { k: 'Rango IP', v: '192.168.0.100 – .111 (VLAN 30)' },
+            { k: 'Rango IP', v: '192.168.0.100 – .111' },
             { k: 'Antivirus', v: 'Defender for Business (EDR)', cls: 'ok' },
-            { k: 'Actualizaciones', v: 'Gestionadas por WSUS', cls: 'ok' },
+            { k: 'Actualizaciones', v: 'Windows Update automático', cls: 'ok' },
             { k: 'BitLocker', v: 'Cifrado de disco activo', cls: 'ok' },
             { k: 'USB', v: 'Restringido por GPO', cls: 'ok' },
             { k: 'Privilegios', v: 'Usuarios estándar (no admin)', cls: 'ok' },
@@ -495,16 +420,16 @@ const NETWORKS = {
         }
       },
       printer2: {
-        x: 800, y: 545,
+        x: 760, y: 790,
         icon: '🖨️', label: 'IMPRESORA', sublabel: 'HP LaserJet (segura)',
-        ip: '192.168.0.200 (VLAN 40)',
+        ip: '192.168.0.200',
         color: '#00c8ff', type: 'printer',
         detail: {
           name: 'Impresora — HP LaserJet Pro M404dn (segura)', type: 'IMPRESORA DE RED — ASEGURADA',
           icon: '🖨️',
           specs: [
             { k: 'Modelo', v: 'HP LaserJet Pro M404dn' },
-            { k: 'IP', v: '192.168.0.200 (VLAN 40 aislada)' },
+            { k: 'IP', v: '192.168.0.200' },
             { k: 'Credenciales', v: 'Contraseña fuerte configurada', cls: 'ok' },
             { k: 'Telnet', v: 'DESACTIVADO', cls: 'ok' },
             { k: 'FTP', v: 'DESACTIVADO', cls: 'ok' },
@@ -516,14 +441,14 @@ const NETWORKS = {
             'Telnet y FTP desactivados: eliminados protocolos inseguros. Solo IPP/HTTPS para gestión',
             'Contraseña de administración cambiada: mínimo 12 caracteres + complejidad',
             'Firmware actualizado a la versión 20230524: todos los CVEs conocidos parcheados',
-            'VLAN 40 aislada: la impresora solo puede comunicarse con los PCs autorizados',
+            'Acceso restringido: la impresora solo puede comunicarse con los PCs autorizados',
             'SNMPv3 con autenticación: reemplaza el antiguo SNMP v1 sin cifrado',
             'Logging de trabajos: registro de quién imprime qué (cumple RGPD trazabilidad)',
           ],
         }
       },
       admin: {
-        x: 1090, y: 300,
+        x: 480, y: 493,
         icon: '👨‍💻', label: 'PC ADMIN', sublabel: 'Administrador de red',
         ip: '192.168.0.50',
         color: '#ffb800', type: 'admin',
@@ -579,6 +504,10 @@ function renderNetwork(netId) {
   const svg = document.getElementById('netSvg');
   svg.innerHTML = '';
 
+  // Dynamic viewBox per network
+  const vbHeight = netId === 'before' ? 620 : 880;
+  svg.setAttribute('viewBox', `0 0 1200 ${vbHeight}`);
+
   // Defs (markers, filters)
   const defs = makeSvgEl('defs', {});
 
@@ -602,7 +531,7 @@ function renderNetwork(netId) {
   svg.appendChild(defs);
 
   // Background subtle gradient
-  const bgRect = makeSvgEl('rect', { x:'0', y:'0', width:'1200', height:'600', fill:'url(#bgGrad)' });
+  const bgRect = makeSvgEl('rect', { x:'0', y:'0', width:'1200', height: String(vbHeight), fill:'url(#bgGrad)' });
   const bgGrad = makeSvgEl('radialGradient', { id:'bgGrad', cx:'50%', cy:'50%', r:'60%' });
   const bgS1 = makeSvgEl('stop', { offset:'0%', 'stop-color':'#0a1428', 'stop-opacity':'1' });
   const bgS2 = makeSvgEl('stop', { offset:'100%', 'stop-color':'#060a14', 'stop-opacity':'1' });
