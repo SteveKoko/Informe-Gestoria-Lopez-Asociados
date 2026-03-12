@@ -134,17 +134,17 @@ const NETWORKS = {
       },
       web: {
         x: 460, y: 480,
-        icon: '🌍', label: 'SERVIDOR WEB', sublabel: 'Apache 2.4.41 + SSH',
+        icon: '🌍', label: 'SERVIDOR WEB', sublabel: 'Apache 2.4.49 + SSH',
         ip: '192.168.1.20',
         color: '#ff3860', type: 'server', vuln: true,
         detail: {
-          name: 'Servidor Web — Apache + OpenSSH', type: 'SERVIDOR WEB / DEBIAN GNU/LINUX 10',
+          name: 'Servidor Web — Apache 2.4.49 + OpenSSH', type: 'SERVIDOR WEB / DEBIAN GNU/LINUX 10',
           icon: '🌍',
           specs: [
             { k: 'SO', v: 'Debian GNU/Linux 10 (Buster)' },
             { k: 'IP', v: '192.168.1.20' },
             { k: 'Máscara / GW', v: '255.255.255.0 / 192.168.1.1' },
-            { k: 'Apache', v: '2.4.41 — DESACTUALIZADO', cls: 'bad' },
+            { k: 'Apache', v: '2.4.49 — DESACTUALIZADO', cls: 'bad' },
             { k: 'OpenSSH', v: '7.9p1 — DESACTUALIZADO', cls: 'bad' },
             { k: 'Puerto SSH', v: '22 (por defecto)', cls: 'bad' },
             { k: 'TLS/HTTPS', v: 'NO CONFIGURADO', cls: 'bad' },
@@ -153,7 +153,7 @@ const NETWORKS = {
             { k: 'Directory listing', v: 'ACTIVADO', cls: 'bad' },
           ],
           vulns: [
-            { sev: 'crit', text: 'Apache 2.4.41: vulnerable a CVE-2021-41773 (path traversal / RCE), CVE-2021-42013 y múltiples CVEs de 2022-2024' },
+            { sev: 'crit', text: 'Apache 2.4.49: vulnerable a CVE-2021-41773 (path traversal / RCE sin autenticación) y CVE-2021-42013 (bypass del fix anterior, RCE via mod_cgi). Ambas permiten ejecutar comandos en el servidor de forma remota' },
             { sev: 'crit', text: 'Sin HTTPS: toda la comunicación web en texto plano. Incumplimiento RGPD para datos personales' },
             { sev: 'crit', text: 'SSH en puerto 22 con autenticación por contraseña: expuesto a internet mediante DMZ del router' },
             { sev: 'high', text: 'Directory listing activado: un atacante puede ver todos los archivos del servidor web' },
